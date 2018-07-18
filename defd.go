@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"github.com/rongyi/stardict"
@@ -33,23 +34,13 @@ func main() {
 			u = "dic/langdao/"
 		}
 	}
-	f1, err := os.Open(u + "langdao-ec-gb.ifo")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f1.Close()
+	a, err := Asset("langdao-ec-gb.ifo")
+	b, err := Asset("langdao-ec-gb.idx")
+	c, err := Asset("langdao-ec-gb.dict.dz")
 
-	f2, err := os.Open(u + "langdao-ec-gb.idx")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f2.Close()
-
-	f3, err := os.Open(u + "langdao-ec-gb.dict.dz")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f3.Close()
+	f1 := bytes.NewReader(a)
+	f2 := bytes.NewReader(b)
+	f3 := bytes.NewReader(c)
 
 	dict, err = stardict.NewDictionary(f1, f2, f3)
 	if err != nil {
